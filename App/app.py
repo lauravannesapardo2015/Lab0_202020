@@ -51,6 +51,7 @@ def loadCSVFile (file, lst, sep=";")->list:
     t1_start = process_time() #tiempo inicial
     dialect = csv.excel()
     dialect.delimiter=sep
+
     try:
         with open(file, encoding="utf-8") as csvfile:
             spamreader = csv.DictReader(csvfile, dialect=dialect)
@@ -77,6 +78,39 @@ def printMenu():
     print("4- Cacular el promedio de la votacion")
     print("5- Consultar buenas peliculas por director")
     print("0- Salir")
+    
+def peliculasBuenas(lst1: list)-> int:
+    #print(lst1)
+    print("Aqui estoy ")
+    nRegistros= len(lst1)
+    pelBuenas=0
+    for i in range (0, nRegistros, 1):
+        if (float(lst1[i]['vote_average']) >= 6):
+            pelBuenas+=1
+            
+        #print(lst1[i]['vote_average'])
+        #pelBuenas=pelBuenas+ float(lst1[i]['vote_average'])
+    #print(pelBuenas)    
+    #input("Click para continuar")
+   
+    return pelBuenas
+
+def PromedioPeliculasBuenas(lst1: list)-> float:
+    #print(lst1)
+    print("Aqui estoy ")
+    nRegistros= len(lst1)
+    pelBuenas=0
+    proBuenas=0.0
+    for i in range (0, nRegistros, 1):
+        if (float(lst1[i]['vote_average']) >= 6):
+            pelBuenas+=1
+            proBuenas= proBuenas + float(lst1[i]['vote_average'])
+        #print(lst1[i]['vote_average'])
+        #pelBuenas=pelBuenas+ float(lst1[i]['vote_average'])
+    #print(pelBuenas)    
+    #input("Click para continuar")
+    proBuenas=proBuenas/pelBuenas
+    return proBuenas
 
 def countElementsFilteredByColumn(criteria, column, lst):
     """
@@ -120,7 +154,7 @@ def main():
     Args: None
     Return: None 
     """
-    lista1 = [] #instanciar una lista vacia para "Details"
+    lista1 = [] #instanciar una lista vacia para "Movies Details"
     lista2 = [] #instanciar una lista vacia para "Casting"
     while True:
         printMenu() #imprimir el menu de opciones en consola
@@ -131,21 +165,25 @@ def main():
                 print("Datos cargados de Movies Large, "+str(len(lista1))+" elementos cargados")
                 lista2=loadCSVFile("Data/MoviesCastingRaw-large.csv", lista2) 
                 print("Datos cargados de Casting Large, "+str(len(lista2))+" elementos cargados")
-                input ("Clic para cotinuar")
+                input ("Clic para cotinuar...")
 
-            if int(inputs[0])==2: #opcion 2
+            elif int(inputs[0])==2: #opcion 2
                 lista1=loadCSVFile("Data/MoviesDetailsCleaned-small.csv", lista1) 
                 print("Datos cargados de Movies Small, "+str(len(lista1))+" elementos cargados")
                 lista2=loadCSVFile("Data/MoviesCastingRaw-small.csv", lista2) 
                 print("Datos cargados de Casting Small, "+str(len(lista2))+" elementos cargados")
                 input ("Clic para cotinuar")
-            if int(inputs[0])==3: #opcion 3
-                print("Funcion en construccion") 
+
+            elif int(inputs[0])==3: #opcion 3
+                peliculas_buenas= peliculasBuenas(lista1)
+                print("El numero de peliculas revisadas fueron: " , len(lista1) , " de las cuales " , peliculas_buenas , "obtuvieron calificacion >= a 6") 
                 input ("Clic para cotinuar")
-            if int(inputs[0])==4: #opcion 4
-                print("Funcion en construccion") 
+
+            elif int(inputs[0])==4: #opcion 4
+                proPeliculas_buenas= PromedioPeliculasBuenas(lista1)
+                print("El  promedio de las peliculas buenas fue de:  " , proPeliculas_buenas ) 
                 input ("Clic para cotinuar")
-            if int(inputs[0])==5: #opcion 5
+            elif int(inputs[0])==5: #opcion 5
                 print("Funcion en construccion") 
                 input ("Clic para cotinuar")
             elif int(inputs[0])==0: #opcion 0, salir
